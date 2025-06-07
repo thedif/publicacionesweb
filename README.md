@@ -1,30 +1,15 @@
 # Plan de Publicaciones
 
-Esta aplicación web permite cargar múltiples imágenes y textos (copys) para generar un archivo PDF que resume el plan de publicaciones para Instagram.
-
-## Requisitos
-
-- Python 3.10+
-- Las dependencias listadas en `requirements.txt`
-
-## Instalación
-
-```bash
-pip install -r requirements.txt
-```
+Esta web genera un PDF con tu plan de publicaciones para Instagram. Permite cargar varias imágenes y copys para combinarlos en un solo documento.
 
 ## Uso
 
-1. Ejecuta la aplicación:
-   ```bash
-   python app.py
-   ```
-2. Abre un navegador y visita `http://localhost:5000`.
-3. Agrega tantas publicaciones como necesites y presiona **Generar PDF** para descargar el plan.
+1. Abre `index.html` en tu navegador (puedes hacer doble clic o servirlo con cualquier servidor estático).
+2. Agrega todas las publicaciones que necesites con el botón **Agregar publicación**.
+3. Pulsa **Generar PDF** y se descargará el plan con cada imagen y su copy.
+
+No se requiere ningún backend ni dependencias adicionales: todo se ejecuta en tu navegador utilizando JavaScript y la biblioteca [jsPDF](https://github.com/parallax/jsPDF).
 
 ## Estructura
 
-- `app.py`: servidor Flask que genera el PDF.
-- `templates/index.html`: formulario para subir imágenes y copys.
-- `requirements.txt`: dependencias del proyecto.
-
+- `index.html`: página principal con el formulario y la lógica para crear el PDF.
