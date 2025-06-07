@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Plan de Publicaciones</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .post { margin-bottom: 15px; padding: 10px; border: 1px solid #ccc; }
+        textarea { width: 100%; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        function addPost() {
+            const posts = document.querySelectorAll('.post').length + 1;
+            const container = document.getElementById('posts');
+            const div = document.createElement('div');
+            div.className = 'post';
+            div.innerHTML = `
+                <p>Imagen ${posts}: <input type="file" name="image_${posts}"></p>
+                <p>Copy ${posts}:<br><textarea name="copy_${posts}" rows="4"></textarea></p>
+            `;
+            container.appendChild(div);
+        }
+
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const posts = document.querySelectorAll('.post');
+            if (posts.length === 0) {
+                alert('Agrega al menos una publicación');
+                return;
+            }
+
+            const entries = [];
+            for (const post of posts) {
+                const fileInput = post.querySelector('input[type="file"]');
+                const textarea = post.querySelector('textarea');
+                const file = fileInput.files[0];
+                const text = textarea.value;
+                if (!file) continue;
+                const dataUrl = await readFile(file);
+                entries.push({ dataUrl, text });
+            }
+            if (entries.length === 0) {
+                alert('No se seleccionaron imágenes');
+                return;
+            }
+
+            const pdf = new jsPDF();
+            entries.forEach((entry, idx) => {
+                if (idx !== 0) pdf.addPage();
+                pdf.addImage(entry.dataUrl, 'JPEG', 10, 10, 100, 100);
+                pdf.text(entry.text, 10, 120, { maxWidth: 180 });
+            });
+            pdf.save('plan_publicaciones.pdf');
+        }
+
+        function readFile(file) {
+            return new Promise(resolve => {
+                const reader = new FileReader();
+                reader.onload = e => resolve(e.target.result);
+                reader.readAsDataURL(file);
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Generar Plan de Publicaciones</h1>
+    <div id="posts">
+        <div class="post">
+            <p>Imagen 1: <input type="file" name="image_1"></p>
+            <p>Copy 1:<br><textarea name="copy_1" rows="4"></textarea></p>
+        </div>
+    </div>
+    <button type="button" onclick="addPost()">Agregar publicación</button>
+    <button type="button" onclick="generatePDF()">Generar PDF</button>
+</body>
+</html>
