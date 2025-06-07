@@ -45,11 +45,11 @@
                 return;
             }
 
-            const pdf = new jsPDF();
+            const pdf = new jsPDF({ orientation: 'landscape' });
             entries.forEach((entry, idx) => {
                 if (idx !== 0) pdf.addPage();
-                pdf.addImage(entry.dataUrl, 'JPEG', 10, 10, 100, 100);
-                pdf.text(entry.text, 10, 120, { maxWidth: 180 });
+                pdf.addImage(entry.dataUrl, 'JPEG', 10, 20, 120, 120);
+                pdf.text(entry.text, 150, 30, { maxWidth: 130 });
             });
             pdf.save('plan_publicaciones.pdf');
         }
